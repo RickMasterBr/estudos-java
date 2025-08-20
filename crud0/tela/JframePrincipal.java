@@ -82,9 +82,72 @@ public class JframePrincipal {
         gbc.gridwidth = 2;
         tela.add(panelBotoes, gbc);
 
+        //botão novo
+        btnNovo.addActionListener(e -> habilitarCampos(true));
+        btnNovo.addActionListener(e -> btnSalvar.setEnabled(true));
+        btnNovo.addActionListener(e -> btnNovo.setEnabled(false));
+        btnNovo.addActionListener(e -> btnExcluir.setEnabled(true));
+
+        //botão salvar
+        btnSalvar.addActionListener(e -> {
+            if (validarCampos()) {
+                JOptionPane.showMessageDialog(tela, "Dados salvos com sucesso!");
+                limparCampos();
+                habilitarCampos(false);
+                btnSalvar.setEnabled(false);
+                btnNovo.setEnabled(true);
+                btnExcluir.setEnabled(false);
+            }
+        });
+
+        //botão excluir
+        btnExcluir.addActionListener(e -> {
+            btnSalvar.setEnabled(false);
+            limparCampos();
+            habilitarCampos(false);
+            btnNovo.setEnabled(true);
+            btnExcluir.setEnabled(false);
+        });
+
+        habilitarCampos(false);
+        txtID.setEnabled(true);
         tela.setVisible(true);
 
 
     }
+
+    public void limparCampos() {
+        txtID.setText("");
+        txtNome.setText("");
+        txtLogin.setText("");
+        txtSenha.setText("");
+    }
+
+    public void habilitarCampos(boolean status) {
+        txtID.setEnabled(status);
+        txtNome.setEnabled(status);
+        txtLogin.setEnabled(status);
+        txtSenha.setEnabled(status);
+    }
+
+    public boolean validarCampos() {
+        if (txtNome.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(tela, "O campo Nome é obrigatório.");
+            txtNome.requestFocus();
+            return false;
+        }
+        if (txtLogin.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(tela, "O campo Login é obrigatório.");
+            txtLogin.requestFocus();
+            return false;
+        }
+        if (txtSenha.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(tela, "O campo Senha é obrigatório.");
+            txtSenha.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
 
 }
