@@ -6,7 +6,7 @@ import javax.swing.*;
 public class JframePrincipal {
 
     private JTextField txtID, txtNome, txtLogin, txtSenha;
-    private JButton btnNovo, btnSalvar, btnPesquisar, btnExcluir;
+    private JButton btnNovo, btnSalvar, btnPesquisar, btnExcluir, btnAlterar;
     private JLabel lblID, lblNome, lblLogin , lblSenha;
     private JFrame tela;
 
@@ -71,6 +71,10 @@ public class JframePrincipal {
         btnSalvar = new JButton("Salvar");
         btnPesquisar = new JButton("Pesquisar");;
         btnExcluir = new JButton("Excluir");
+        btnAlterar = new JButton("Alterar");
+        btnSalvar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        btnAlterar.setEnabled(false);
 
         gbc.anchor = GridBagConstraints.CENTER;
         JPanel panelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
@@ -78,6 +82,7 @@ public class JframePrincipal {
         panelBotoes.add(btnSalvar);
         panelBotoes.add(btnPesquisar);
         panelBotoes.add(btnExcluir);
+        panelBotoes.add(btnAlterar);
 
         gbc.gridwidth = 2;
         tela.add(panelBotoes, gbc);
@@ -107,10 +112,28 @@ public class JframePrincipal {
             habilitarCampos(false);
             btnNovo.setEnabled(true);
             btnExcluir.setEnabled(false);
+            btnAlterar.setEnabled(false);
+            txtLogin.setEnabled(true);
         });
 
+        //botão pesquisar (Autocompleta com dados genericos somente se o campo Login não estiver vazio)
+        btnPesquisar.addActionListener(e -> {
+            if (!txtLogin.getText().isEmpty()) {
+                txtID.setText("1");
+                txtNome.setText("Usuário Exemplo");
+                txtSenha.setText("senha123");
+                habilitarCampos(false);
+                btnSalvar.setEnabled(false);
+                btnExcluir.setEnabled(true);
+                btnAlterar.setEnabled(true);
+            } else {
+                JOptionPane.showMessageDialog(tela, "O campo Login deve ser preenchido para pesquisar.");
+            }
+        });
+
+
         habilitarCampos(false);
-        txtID.setEnabled(true);
+        txtLogin.setEnabled(true);
         tela.setVisible(true);
 
 
