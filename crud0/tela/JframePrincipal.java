@@ -5,26 +5,36 @@ import java.awt.*;
 
 public class JframePrincipal {
 
-    // 1. Declaração de todos os componentes e variáveis da classe
-    private JFrame tela;
-    private JLabel lblID, lblNome, lblLogin, lblSenha;
-    private JTextField txtID, txtNome, txtLogin, txtSenha;
-    private JButton btnNovo, btnSalvar, btnPesquisar, btnExcluir, btnAlterar;
-    private GridBagConstraints grid;
-    private int linha;
+    // 1. Declaração de todos os componentes e variáveis da classe e inicializando-os
+    private JFrame tela = new JFrame("Cadastro");
+
+    private JTextField txtID = new JTextField(10);
+    private JTextField txtNome = new JTextField(20);
+    private JTextField txtLogin = new JTextField(15);
+    private JTextField txtSenha = new JTextField(15);
+
+    private final JButton btnNovo = new JButton("Novo");
+    private final JButton btnSalvar = new JButton("Salvar");
+    private final JButton btnPesquisar = new JButton("Pesquisar");
+    private final JButton btnAlterar = new JButton("Alterar");
+    private final JButton btnExcluir = new JButton("Excluir");
+
+    private GridBagConstraints grid = new GridBagConstraints();
+    private int linha = 0;
+
 
     // 2. Construtor chama os métodos de configuração em ordem
     public JframePrincipal() {
-        tela = new JFrame("Cadastro");
 
         configurarTela();
-        inicializarComponentes();
-        configurarLayout();
+        adicionarCampos();
+        adicionarBotoes();
         configurarBotoes();
         estadoInicial();
 
         tela.setVisible(true);
     }
+
 
     // 3. Métodos privados para cada responsabilidade
     private void configurarTela() {
@@ -34,79 +44,29 @@ public class JframePrincipal {
         tela.setResizable(false);
         tela.setLocationRelativeTo(null); // Centraliza a tela
 
-        grid = new GridBagConstraints();
         grid.insets = new Insets(5, 5, 5, 5);
         grid.anchor = GridBagConstraints.WEST;
-        linha = 0;
     }
 
-    private void inicializarComponentes() {
-        lblID = new JLabel("ID:");
-        txtID = new JTextField(10);
-
-        lblNome = new JLabel("Nome:");
-        txtNome = new JTextField(20);
-
-        lblLogin = new JLabel("Login:");
-        txtLogin = new JTextField(15);
-
-        lblSenha = new JLabel("Senha:");
-        txtSenha = new JTextField(15);
-
-        btnNovo = new JButton("Novo");
-        btnSalvar = new JButton("Salvar");
-        btnPesquisar = new JButton("Pesquisar");
-        btnExcluir = new JButton("Excluir");
-        btnAlterar = new JButton("Alterar");
+    private void adicionarCampos(){
+        addCampo("ID", txtID);
+        addCampo("Nome", txtNome);
+        addCampo("Login", txtLogin);
+        addCampo("Senha", txtSenha);
     }
 
-    private void configurarLayout() {
-        // ID
-        grid.gridx = 0;
-        grid.gridy = linha;
-        tela.add(lblID, grid);
-        grid.gridx = 1;
-        tela.add(txtID, grid);
-        linha++;
+    private void adicionarBotoes(){
+        JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        botoes.add(btnNovo);
+        botoes.add(btnSalvar);
+        botoes.add(btnPesquisar);
+        botoes.add(btnAlterar);
+        botoes.add(btnExcluir);
 
-        // Nome
-        grid.gridx = 0;
-        grid.gridy = linha;
-        tela.add(lblNome, grid);
-        grid.gridx = 1;
-        tela.add(txtNome, grid);
-        linha++;
-
-        // Login
-        grid.gridx = 0;
-        grid.gridy = linha;
-        tela.add(lblLogin, grid);
-        grid.gridx = 1;
-        tela.add(txtLogin, grid);
-        linha++;
-
-        // Senha
-        grid.gridx = 0;
-        grid.gridy = linha;
-        tela.add(lblSenha, grid);
-        grid.gridx = 1;
-        tela.add(txtSenha, grid);
-        linha++;
-
-        // Painel de Botões
-        JPanel panelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        panelBotoes.add(btnNovo);
-        panelBotoes.add(btnSalvar);
-        panelBotoes.add(btnPesquisar);
-        panelBotoes.add(btnAlterar);
-        panelBotoes.add(btnExcluir);
-        
-
-        grid.gridx = 0;
-        grid.gridy = linha;
-        grid.gridwidth = 2; // Ocupa duas colunas
+        grid.gridx = 0; grid.gridy = linha;
+        grid.gridwidth = 2;
         grid.anchor = GridBagConstraints.CENTER;
-        tela.add(panelBotoes, grid);
+        tela.add(botoes, grid);
     }
 
     private void configurarBotoes() {
@@ -136,7 +96,7 @@ public class JframePrincipal {
                 txtID.setText("1");
                 txtNome.setText("Usuário Exemplo");
                 txtSenha.setText("senha123");
-                
+
                 habilitarCampos(false); // Desabilita campos após a pesquisa
                 btnSalvar.setEnabled(false);
                 btnExcluir.setEnabled(true);
@@ -146,7 +106,7 @@ public class JframePrincipal {
                 JOptionPane.showMessageDialog(tela, "O campo Login deve ser preenchido para pesquisar.");
             }
         });
-        
+
         // Botão Alterar
         btnAlterar.addActionListener(e -> {
             habilitarCampos(true);
@@ -169,16 +129,17 @@ public class JframePrincipal {
         limparCampos();
         habilitarCampos(false);
         txtLogin.setEnabled(true); // Apenas login habilitado para pesquisa
-        
+
         btnNovo.setEnabled(true);
         btnSalvar.setEnabled(false);
         btnAlterar.setEnabled(false);
         btnExcluir.setEnabled(false);
-        
+
         txtLogin.requestFocus();
     }
-    
-    // 4. Métodos de apoio que já estavam bem organizados
+
+
+    // 4. Métodos de apoio
     private void limparCampos() {
         txtID.setText("");
         txtNome.setText("");
@@ -193,45 +154,40 @@ public class JframePrincipal {
         txtSenha.setEnabled(status);
     }
 
-    //Metodo Validar campos com REGEX e impede campos vazios ou caracteres especfíficos em determinados campos
     private boolean validarCampos() {
-
-        if (txtNome.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(tela, "O campo Nome é obrigatório.");
-            txtNome.requestFocus();
-            return false;
-        } else if (!txtNome.getText().matches("[a-zA-ZÀ-ÿ\\s]+")) {
-            JOptionPane.showMessageDialog(tela, "O campo Nome aceita apenas letras e espaços.");
+        // Metodo de validação dos campos com mensagens específicas
+        if (txtNome.getText().trim().isEmpty() || !txtNome.getText().matches("[a-zA-ZÀ-ÿ\\s]+")) {
+            JOptionPane.showMessageDialog(tela, "Nome inválido.");
             txtNome.requestFocus();
             return false;
         }
-
-        if (txtLogin.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(tela, "O campo Login é obrigatório.");
-            txtLogin.requestFocus();
-            return false;
-        } else if(!txtLogin.getText().matches("[a-zA-Z0-9_]+")) {
-            JOptionPane.showMessageDialog(tela, "O campo Login aceita apenas letras, números e underscores (_).");
+        if (txtLogin.getText().trim().isEmpty() || !txtLogin.getText().matches("[a-zA-Z0-9_]+")) {
+            JOptionPane.showMessageDialog(tela, "Login inválido.");
             txtLogin.requestFocus();
             return false;
         }
-
-        if (txtSenha.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(tela, "O campo Senha é obrigatório.");
-            txtSenha.requestFocus();
-            return false;
-        } else if(txtSenha.getText().length() < 6) {
-            JOptionPane.showMessageDialog(tela, "O campo Senha deve ter no mínimo 6 caracteres.");
+        if (txtSenha.getText().length() < 6) {
+            JOptionPane.showMessageDialog(tela, "Senha deve ter no mínimo 6 caracteres.");
             txtSenha.requestFocus();
             return false;
         }
-
         return true;
     }
 
+    private void addCampo(String label, JComponent campo) {
+         //Metodo auxiliar para adicionar os campos na tela
+        grid.gridx = 0;
+        grid.gridy = linha;
+        tela.add(new JLabel(label), grid);
+        grid.gridx = 1;
+        tela.add(campo, grid);
+        linha++;
+    }
+
+    
     // 5. Método main para iniciar a aplicação
     public static void main(String[] args) {
-        // Garante que a UI seja criada na thread de eventos do Swing
-        SwingUtilities.invokeLater(() -> new JframePrincipal());
+
+        new JframePrincipal();
     }
 }
